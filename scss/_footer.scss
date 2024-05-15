@@ -1,0 +1,141 @@
+.footer-block{
+    background: black;
+    .border{
+        border-bottom: 1px solid #FFFFFF33;
+        padding:30px;
+     
+    .paragraph{
+        max-width: 1072px;
+    
+        p{
+        font-family:'Roboto',sans-serif;
+        font-weight:300;
+        font-size:18px;
+        line-height:31px;
+         color:#FFFFFF;
+        //  text-align:center;
+        } 
+    }
+}
+.footer-main{
+
+    .footer-four{
+          display:flex;
+          gap:2%;
+        .flog-fmessage{
+            width: 27.6%;
+    margin-top: 150px;
+            .footer-logo{
+             margin-bottom: 2px;
+            }
+          .footer-message{
+            p{
+            font-family:'Roboto', sans-serif;
+            font-size:16px;
+            font-weight:300;
+            line-height: 27px;
+            color:white;
+          }
+        }
+        }
+        .footer-links{
+            margin-top: 150px;
+            border-left:1px solid #FFFFFF33;
+            width:20%;
+            .quick-links{
+                padding-left: 35px;
+                p{
+                    font-family:'Roboto', sans-serif;
+                    font-size:16px;
+                    font-weight:400;
+                    line-height: 35px;
+                    color:white;
+                }
+                ul{
+                    list-style-type: none;
+                    // text-align: center;
+                    li{
+                        a{
+                            text-decoration: none;
+                            color:white;
+                        }
+                    }
+                }
+            }
+        }
+        .services-footer{
+            margin-top:150px;
+            border-left:1px solid #FFFFFF33;
+            width:20%;
+            
+            .quick-links{
+                padding-left: 35px;
+                p{
+                    font-family:'Roboto', sans-serif;
+                    font-size:16px;
+                    font-weight:400;
+                    line-height: 35px;
+                    color:white;
+                }
+                ul{
+                    list-style-type: none;
+                    // text-align: center;
+                    li{
+                        a{
+                            text-decoration: none;
+                            color:white;
+                        }
+                    }
+                }
+            }
+        }
+        .contact-footer{
+            margin-top:150px;
+            border-left:1px solid #FFFFFF33;
+
+            width:25%;
+            .contactf
+            {
+                padding-left: 35px;
+                padding-bottom:10px;
+                p{
+                    font-family:'Roboto', sans-serif;
+                    font-size:16px;
+                    font-weight:400;
+                    line-height: 35px;
+                    color:white;
+                }
+            }
+            .detail-logo{
+                 .phone{
+                    display:flex;
+                    gap:2%;
+                    margin:5px;
+                 }
+                 .e-mail{
+                    display:flex;
+                    gap:2%;
+                    margin:5px;
+                 }
+            }
+        }
+      
+    }
+}
+}
+.footer-last{
+    border-top: 1px solid #FFFFFF33;
+    text-align: center;
+    padding:20px;
+    margin:5px;
+    .footer-bottom{
+        h6{
+            font-family:'Poppins', sans-serif;
+                            font-size:16px;
+                            font-weight:400;
+                            line-height: 24px;
+                            color:white;
+        }
+    }
+ 
+}
