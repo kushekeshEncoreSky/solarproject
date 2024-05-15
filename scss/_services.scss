@@ -1,0 +1,38 @@
+.services{
+    .text-heading{
+        margin-top:94px;
+        h4{
+            font-family: 'Poppins' sans-serif;
+        font-size:20px;
+         text-align: center;
+         line-height: 25px;
+         font-weight:700;
+         color:red;
+        }
+        h2{
+          text-align: center;
+          font-weight: 700;
+          font-size:50px;
+          line-height:67px;
+        align-items: center;
+        }
+    }
+    .assistance{
+        max-width:1180px;
+        background-color: green;
+        .services-block{
+            width:33%;
+          background: green;
+            .service-card{
+                background: green;
+             h4{
+                font-family: 'poppins',sans-serif;
+                font-weight: 700;
+                font-size:24px;
+                line-height: 39px;
+                color:#464646;
+            }
+        }
+        }
+    }
+}
