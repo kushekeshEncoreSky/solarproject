@@ -211,10 +211,11 @@
 .footer-block .footer-main .footer-four {
   display: flex;
   gap: 2%;
+  padding: 20px;
 }
 .footer-block .footer-main .footer-four .flog-fmessage {
   width: 27.6%;
-  margin-top: 150px;
+  padding: 25px;
 }
 .footer-block .footer-main .footer-four .flog-fmessage .footer-logo {
   margin-bottom: 2px;
@@ -227,12 +228,11 @@
   color: white;
 }
 .footer-block .footer-main .footer-four .footer-links {
-  margin-top: 150px;
+  padding: 25px 15px;
   border-left: 1px solid rgba(255, 255, 255, 0.2);
-  width: 20%;
 }
 .footer-block .footer-main .footer-four .footer-links .quick-links {
-  padding-left: 35px;
+  padding-left: 20px 25px;
 }
 .footer-block .footer-main .footer-four .footer-links .quick-links p {
   font-family: "Roboto", sans-serif;
@@ -247,11 +247,14 @@
 .footer-block .footer-main .footer-four .footer-links .quick-links ul li a {
   text-decoration: none;
   color: white;
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 35px;
 }
 .footer-block .footer-main .footer-four .services-footer {
-  margin-top: 150px;
+  padding: 44px 21px;
   border-left: 1px solid rgba(255, 255, 255, 0.2);
-  width: 20%;
 }
 .footer-block .footer-main .footer-four .services-footer .quick-links {
   padding-left: 35px;
@@ -269,9 +272,13 @@
 .footer-block .footer-main .footer-four .services-footer .quick-links ul li a {
   text-decoration: none;
   color: white;
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 35px;
 }
 .footer-block .footer-main .footer-four .contact-footer {
-  margin-top: 150px;
+  padding: 40px 0px;
   border-left: 1px solid rgba(255, 255, 255, 0.2);
   width: 25%;
 }
@@ -311,6 +318,78 @@
   color: white;
 }
 
+:root {
+  --bg-main:#18122B;
+  --bg-primary:#ECF2FF;
+}
+
+a, li {
+  margin: 0;
+  font-size: 1.8rem;
+  color: var(--bg-primary);
+  text-decoration: none;
+}
+
+header {
+  background-color: black;
+  color: var(--bg-primary);
+}
+
+.nav-contain {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0px;
+}
+
+.nav-contain ul {
+  list-style: none;
+  display: flex;
+  gap: 36px;
+}
+
+.nav-contain ul li {
+  line-height: 21px;
+  position: relative;
+  cursor: pointer;
+}
+
+.nav-contain ul li:hover {
+  color: red;
+}
+
+.nav-contain .drop-down {
+  min-width: -moz-max-content;
+  min-width: max-content;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-main);
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+  align-items: center;
+  padding: 16px 0px;
+  gap: 16px;
+  visibility: hidden;
+  opacity: 0;
+  top: 55px;
+  transition: all 0.3s ease;
+  z-index: 2;
+}
+
+.nav-contain .drop-down li {
+  height: 36px;
+  line-height: 36px;
+  width: 100%;
+  text-align: center;
+}
+
+.nav-contain ul li:hover > .drop-down {
+  visibility: visible;
+  opacity: 1;
+  top: 6rem;
+}
+
 * {
   margin: 0px;
   padding: 0px;
@@ -342,40 +421,6 @@ h4 {
   max-width: 1280px;
   margin: auto;
   padding: 0 20px;
-}
-
-.navbar {
-  background-color: black;
-}
-
-.nav-bar {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-}
-
-.logo-here {
-  padding: 5px 20px;
-  align-items: center;
-  text-align: center;
-}
-
-.logo-here img {
-  width: 147px;
-  padding: 10px 0px;
-}
-
-.nav-contain {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 22px;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.nav-contain a {
-  text-decoration: none;
-  color: #FFFFFF;
 }
 
 .banner {

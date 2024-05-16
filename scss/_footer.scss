@@ -22,9 +22,11 @@
     .footer-four{
           display:flex;
           gap:2%;
+          padding:20px;
         .flog-fmessage{
             width: 27.6%;
-    margin-top: 150px;
+            padding:25px;
+    // margin-top: 150px;
             .footer-logo{
              margin-bottom: 2px;
             }
@@ -39,11 +41,12 @@
         }
         }
         .footer-links{
-            margin-top: 150px;
+            // margin-top: 150px;
+            padding:25px 15px;
             border-left:1px solid #FFFFFF33;
-            width:20%;
+            // width:20%;
             .quick-links{
-                padding-left: 35px;
+                padding-left: 20px 25px;
                 p{
                     font-family:'Roboto', sans-serif;
                     font-size:16px;
@@ -58,15 +61,20 @@
                         a{
                             text-decoration: none;
                             color:white;
+                            font-family:'Roboto', sans-serif;
+                            font-size:16px;
+                            font-weight:300;
+                            line-height: 35px;
+                            
                         }
                     }
                 }
             }
         }
         .services-footer{
-            margin-top:150px;
+            padding:44px 21px;
             border-left:1px solid #FFFFFF33;
-            width:20%;
+          
             
             .quick-links{
                 padding-left: 35px;
@@ -84,13 +92,17 @@
                         a{
                             text-decoration: none;
                             color:white;
+                            font-family:'Roboto', sans-serif;
+                            font-size:16px;
+                            font-weight:300;
+                            line-height: 35px;
                         }
                     }
                 }
             }
         }
         .contact-footer{
-            margin-top:150px;
+           padding:40px 0px;
             border-left:1px solid #FFFFFF33;
 
             width:25%;

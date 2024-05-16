@@ -2,6 +2,7 @@
 @import 'about-us';
 @import 'services';
 @import 'footer';
+@import 'navbar';
 *{
     margin:0px;
     padding:0px;
@@ -31,36 +32,54 @@ h4{
     margin:auto;
     padding:0 20px;
 }
-.navbar{
-    background-color: black;
+// .navbar{
+//     background-color: black;
    
-}
-.nav-bar{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content: space-around;
-}
-.logo-here{
-    padding:5px 20px;
-    align-items: center;
-    text-align: center;
-}
-.logo-here img{
-    width:147px;
-    padding:10px 0px;
-}
-.nav-contain{
-   display:flex;
-   flex-wrap:wrap;
-   gap:22px;
-   justify-content: space-between;
-   align-items: center;
+// }
+// .nav-bar{
+//     display:flex;
+//     flex-wrap:wrap;
+//     justify-content: space-around;
+// }
+// .logo-here{
+//     padding:5px 20px;
+//     align-items: center;
+//     text-align: center;
+// }
+// .logo-here img{
+//     width:147px;
+//     padding:10px 0px;
+// }
+// .nav-contain{
+//    display:flex;
+//    flex-wrap:wrap;
+//    gap:22px;
+//    justify-content: space-between;
+//    align-items: center;
     
-}
-.nav-contain a{
-   text-decoration: none;
-    color:#FFFFFF;
-}
+// }
+// .nav-contain a{
+//    text-decoration: none;
+//     color:#FFFFFF;
+
+// }
+// .menu-has-child{
+//     .sub-menu{
+//         background: white;
+//         position: absolute;
+//         width: 100%;
+//         max-width: 140px;
+//       }
+//       li{
+//         list-style-type: none;
+//         a{
+//             color: #000000;
+//         }
+//       }    
+// }
+// a:hover{
+//     color:red;
+// }
 .banner{
     margin:40px 0px;
 }
