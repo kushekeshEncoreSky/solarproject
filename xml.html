@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Api handling</title>
+</head>
+<body>
+    <h2>Data Showing</h2>
+    <div id="demo">
+        <!-- <img src="" id="image-tag"
+        /> -->
+
+    </div>
+    <button type="button" onclick="loadXMLDoc()">Show Data</button>
+
+    <script>
+        function loadXMLDoc() {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    // Parse the JSON response
+                    var response = JSON.parse(this.responseText);
+                    var users = response.data;
+
+                    // Clear previous content
+                    var demoDiv = document.getElementById("demo");
+                    demoDiv.innerHTML = '';
+
+                    // Loop through each user and display their avatar, first name, and last name
+                    users.forEach(user => {
+                    
+                        // Create a container div for each user
+                        var userDiv = document.createElement('div');
+                        // userDiv.style.border = "1px solid #ccc";
+                        // userDiv.style.margin = "10px";
+                        // userDiv.style.padding = "10px";
+                        // userDiv.style.textAlign = "center";
+
+                        // Create an image element for the avatar
+                        // let image=document.getElementById('image-tag');
+                        //   console.log(image);
+                        // image.src=user.avatar;
+                        
+                        var avatar = document.createElement('img');
+                        
+                        avatar.src = user.avatar;
+                        avatar.alt = `${user.first_name} ${user.last_name}`;
+                        // avatar.style.width = "100px";
+                        // avatar.style.height = "100px";
+                        avatar.style.borderRadius = "50%";
+
+                        // Create a paragraph element for the user's name
+                        var   name = document.createElement('h1');
+                        name.textContent = `${user.first_name} ${user.last_name}`;
+
+                        // Append the avatar and name to the user div
+                        userDiv.appendChild(avatar);
+                        userDiv.appendChild(name);
+
+                        // Append the user div to the demo div
+                        demoDiv.appendChild(userDiv);
+                    });
+                }
+            };
+            xhr.open("GET", "https://reqres.in/api/users", true);
+            xhr.send();
+        }
+    </script>
+</body>
+
+</html>
