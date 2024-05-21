@@ -37,6 +37,7 @@
             <button type="submit">Update User</button>
         </form>
         <div id="response" class="response"></div>
+        <button onclick="deletedata()"> Delete data</button>
     </div>
 
     <script>
@@ -73,6 +74,18 @@
                 console.error('Error:', error);
             });
         });
+        const deletedata=()=>{
+            fetch('https://reqres.in/api/users?page=2',{
+                method:'DELETE'
+            })
+            .then((resData)=>{  
+                return resData.json();
+            }).then((resData)=>{
+                console.log(data);
+            }).catch(()=>{
+
+            })
+        }
     </script>
 </body>
 </html>
