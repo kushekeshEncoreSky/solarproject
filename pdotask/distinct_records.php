@@ -6,7 +6,7 @@ try {
     $sql = "SELECT e1.* 
             FROM employees e1
             INNER JOIN (
-                SELECT MIN(id) as min_id
+                SELECT id as min_id
                 FROM employees
                 WHERE position = 'Manager'
                 GROUP BY department
