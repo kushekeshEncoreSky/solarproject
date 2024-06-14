@@ -1,0 +1,159 @@
+
+
+header {
+    background-color: #fff;
+    padding: 10px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.container {
+max-width: 1240px;
+padding: 0px 20px;
+margin: 0 auto;
+}
+
+.logo {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #333;
+    text-decoration: none;
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin-right: 20px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #333;
+}
+
+.auth-buttons {
+    align-items: center;
+    display: flex;
+    gap: 10px;
+}
+
+.button {
+    text-decoration: none;
+    padding: 8px 15px;
+    background-color: #0073e6;
+    color: #fff;
+    border-radius: 5px;
+}
+
+.button:hover {
+    background-color: #005bb5;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
+
+
+
+
+.section-title {
+    font-size: 2em;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.grid {
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    /* justify-content: space-between; */
+}
+
+.post-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+    width: 26%;
+    border: 1px solid #ccc;
+    /* padding: 20px;  */
+    width:392px;
+   
+    transition: box-shadow 0.3s ease; 
+}
+
+.post-card img {
+    width: 100%;
+    height: auto;
+    max-height:300px;
+    object-fit: cover;
+    display:flex;
+    justify-content: center;
+}
+
+.post-info {
+    padding: 15px;
+}
+
+.category {
+    display: inline-block;
+    background-color: #0073e6;
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.post-title {
+    font-size: 1.2em;
+    margin: 10px 0;
+    color: #333;
+}
+
+.post-meta {
+    font-size: 0.9em;
+    color: #777;
+}
+
+.post-meta .author {
+    margin-right: 10px;
+}
+
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px; 
+}
+
+
+
+
+
+.post-card:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+}
+
+
+.post-title {
+    font-size: 1.2rem; 
+    font-weight: bold; 
+    margin-bottom: 10px; 
+}
+
+.post-description {
+    font-size: 1rem; 
+    color: #666; 
+}
+.section-title{
+   text-align: center;
+}
