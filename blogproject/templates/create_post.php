@@ -143,6 +143,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     .signup-link:hover {
         text-decoration: underline;
     }
+    .resizable {
+    min-height: 100px; /* Minimum height to start with */
+    overflow-y: hidden; /* Hide vertical scrollbar */
+}
 </style>
 </head>
 <body>
@@ -151,7 +155,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <form action="create_post.php" method="post" enctype="multipart/form-data">
         <h2 class="form-title">Create Post</h2>
         <input type="text" name="title" class="form-input" placeholder="Title" required>
-        <textarea name="content" class="form-input" placeholder="Content" required></textarea>
+        <textarea name="content" id="content" class="form-input resizable" placeholder="Content" required
+        onChange="autoResize(this)"></textarea>
+
         <input type="file" name="image" class="form-input">
         <button type="submit" class="form-button">Create Post</button>
     </form>
@@ -159,5 +165,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <?php include('../includes/footer.php'); ?>
 
+<script>
+    function autoResize(element) {
+        element.style.height = 'auto';
+        element.style.height = (element.scrollHeight) + 'px';
+    }
+</script>
 </body>
 </html>

@@ -2,6 +2,8 @@
 if (!isset($_SESSION)) {
     session_start();
 }
+
+$current_page = basename($_SERVER['PHP_SELF']);
 ?>
 
 <!DOCTYPE html>
@@ -11,6 +13,7 @@ if (!isset($_SESSION)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MetaBlog</title>
     <link rel="stylesheet" href="../assests/css/style.css">
+    <!-- <link rel="stylesheet" href="../assests/css/edit_post.css"> -->
 </head>
 <body>
     <header>
@@ -28,17 +31,22 @@ if (!isset($_SESSION)) {
             </nav>
             <div class="auth-buttons">
                 <?php
-                if (isset($_SESSION['user_id'])) {
-                    echo '<span>Welcome, ' . htmlspecialchars($_SESSION['username']) . '</span>';
-                    echo '<a href="../templates/create_post.php" class="button">Create Post</a>';
-                    echo '<a href="../templates/login.php" class="button">Logout</a>';
-                } else {
+                if ($current_page == 'index.php') {
                     echo '<a href="login.php" class="button">Login</a>';
                     echo '<a href="register.php" class="button">Sign Up</a>';
+                } else {
+                    if (isset($_SESSION['user_id'])) {
+                        echo '<span>Welcome, ' . htmlspecialchars($_SESSION['username']) . '</span>';
+                        echo '<a href="../templates/create_post.php" class="button">Create Post</a>';
+                        echo '<a href="../templates/logout.php" class="button">Logout</a>'; // Changed to logout.php
+                    } else {
+                        echo '<a href="login.php" class="button">Login</a>';
+                        echo '<a href="register.php" class="button">Sign Up</a>';
+                    }
                 }
                 ?>
             </div>
         </div>
     </header>
-</body>
-</html>
+
+
