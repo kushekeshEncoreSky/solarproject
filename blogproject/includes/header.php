@@ -13,7 +13,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MetaBlog</title>
     <link rel="stylesheet" href="../assests/css/style.css">
-    <!-- <link rel="stylesheet" href="../assests/css/edit_post.css"> -->
+    <!-- <link rel="stylesheet" href="../assests/css/style1.css"> -->
 </head>
 <body>
     <header>

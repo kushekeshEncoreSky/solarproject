@@ -1,6 +1,9 @@
+
+
 <?php
 include('../includes/db.php');
-// include('../includes/header.php');
+
+$error_message = "";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
@@ -19,11 +22,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
             header("Location: my_posts.php");
+            exit();
         } else {
-            echo "Invalid password.";
+            $error_message = "Invalid password or username.";
         }
     } else {
-        echo "No user found.";
+        $error_message = "No user found.";
     }
 }
 ?>
@@ -35,8 +39,53 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../assests/css/style1.css">
     <title>Login</title>
+    <style>
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; 
+            background-color: rgb(0,0,0); 
+            background-color: rgba(0,0,0,0.4); 
+            padding-top: 60px; 
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; 
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 300px;
+            text-align: center;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
+    <?php if (!empty($error_message)): ?>
+        <div id="errorModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <p><?php echo $error_message; ?></p>
+            </div>
+        </div>
+    <?php endif; ?>
+
     <div class="form-container">
         <form action="login.php" method="post" class="login-form">
             <h2 class="form-title">WELCOME BACK</h2>
@@ -44,18 +93,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <input type="name" name="username" placeholder="Username" required class="form-input">
             <input type="password" name="password" placeholder="Password" required class="form-input">
             <div class="form-options">
-                <!-- <label class="remember-me">
-                    <input type="checkbox" name="remember"> Remember me
-                </label> -->
                 <a href="#" class="forgot-password">Forgot password</a>
             </div>
             <button type="submit" class="form-button">Sign in</button>
             <p class="signup-text">Don't have an account? <a href="register.php" class="signup-link">Sign up for free!</a></p>
         </form>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var modal = document.getElementById('errorModal');
+            if (modal) {
+                modal.style.display = "block";
+
+                var closeBtn = modal.querySelector('.close');
+                closeBtn.onclick = function() {
+                    modal.style.display = "none";
+                }
+
+                window.onclick = function(event) {
+                    if (event.target == modal) {
+                        modal.style.display = "none";
+                    }
+                }
+            }
+        });
+    </script>
 </body>
 </html>
 
 <?php include('../includes/footer.php'); ?>
-
-

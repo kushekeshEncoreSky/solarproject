@@ -50,7 +50,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if ($stmt->execute()) {
-        echo "<p>Post updated successfully.</p>";
         header("Location: view_post.php?id=" . $post_id);
         exit();
     } else {
@@ -72,8 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <h1 class="form-title">Edit Post</h1>
         <form method="post" enctype="multipart/form-data">
             <input type="text" name="title" class="form-input" value="<?php echo htmlspecialchars($post['title']); ?>" required>
-            <textarea name="content" id="content" class="form-input resizable" placeholder="Content" required
-            onChange="autoResize(this)"></textarea>
+            <textarea name="content" id="content" class="form-input resizable" placeholder="Content" required oninput="autoResize(this)"><?php echo htmlspecialchars($post['content']); ?></textarea>
             <input type="file" name="image" class="form-input">
             <button type="submit" class="form-button">Update Post</button>
         </form>
@@ -85,6 +83,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         element.style.height = 'auto';
         element.style.height = (element.scrollHeight) + 'px';
     }
+
+    // Auto resize the textarea on page load
+    document.addEventListener("DOMContentLoaded", function() {
+        var contentTextarea = document.getElementById("content");
+        if (contentTextarea) {
+            autoResize(contentTextarea);
+        }
+    });
 </script>
 </html>
 
