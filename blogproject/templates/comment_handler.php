@@ -18,7 +18,7 @@ function display_comments($post_id, $conn) {
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             echo '<div class="comment">';
-            echo '<p class="comment-author">' . htmlspecialchars($row["username"]) . ':</p>';
+            echo '<h3 class="comment-author">' . htmlspecialchars($row["username"]) . ':</h3>';
             echo '<p class="comment-content">' . htmlspecialchars($row["content"]) . '</p>'; // Changed from "comment" to "content"
             echo '<p class="comment-date">' . htmlspecialchars($row["created_at"]) . '</p>';
             echo '</div>';

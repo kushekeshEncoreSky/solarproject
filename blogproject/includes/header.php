@@ -13,20 +13,20 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MetaBlog</title>
     <link rel="stylesheet" href="../assests/css/style.css">
-    <!-- <link rel="stylesheet" href="../assests/css/style1.css"> -->
+    <!-- <link rel="stylesheet" href="../assets/css/style1.css"> -->
 </head>
 <body>
     <header>
         <div class="container">
-            <a href="index.php" class="logo">MetaBlog</a>
+            <a href="#" class="logo">MetaBlog</a>
             <nav>
                 <ul>
-                    <li><a href="index.php">Home</a></li>
+                    <!-- <li><a href="index.php">Home</a></li>
                     <li><a href="blog.php">Blog</a></li>
                     <li><a href="single_post.php">Single Post</a></li>
                     <li><a href="pages.php">Pages</a></li>
-                    <li><a href="contact.php">Contact</a></li>
-                    <li><a href="all_posts.php">All Posts</a></li> <!-- Add All Posts link -->
+                    <li><a href="contact.php">Contact</a></li> -->
+                    <li style="margin:10px 0px 0px 0px;"><a href="all_posts.php" class="all-posts-link" >All Posts</a></li> <!-- Add All Posts link -->
                 </ul>
             </nav>
             <div class="auth-buttons">
@@ -48,5 +48,5 @@ $current_page = basename($_SERVER['PHP_SELF']);
             </div>
         </div>
     </header>
-
-
+</body>
+</html>

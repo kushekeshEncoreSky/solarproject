@@ -9,28 +9,45 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-    $sql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+    // Check if username or email already exists
+    $sql = "SELECT id FROM users WHERE username = ? OR email = ?";
     $stmt = $conn->prepare($sql);
+    $stmt->bind_param('ss', $username, $email);
+    $stmt->execute();
+    $stmt->store_result();
 
-    // Bind parameters
-    $stmt->bind_param('sss', $username, $email, $password);
-
-    // Execute statement
-    if ($stmt->execute()) {
-        echo "<script>
-                window.onload = function() {
-                    document.getElementById('successModal').style.display = 'block';
-                    setTimeout(function() {
-                        window.location.href = 'login.php';
-                    }, 3000); // 3 seconds delay
-                }
-              </script>";
-    } else {
+    if ($stmt->num_rows > 0) {
         echo "<script>
                 window.onload = function() {
                     document.getElementById('errorModal').style.display = 'block';
+                    document.getElementById('errorModalMessage').textContent = 'Username or email already exists.';
                 }
               </script>";
+    } else {
+        $sql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+
+        // Bind parameters
+        $stmt->bind_param('sss', $username, $email, $password);
+
+        // Execute statement
+        if ($stmt->execute()) {
+            echo "<script>
+                    window.onload = function() {
+                        document.getElementById('successModal').style.display = 'block';
+                        setTimeout(function() {
+                            window.location.href = 'login.php';
+                        }, 3000); // 3 seconds delay
+                    }
+                  </script>";
+        } else {
+            echo "<script>
+                    window.onload = function() {
+                        document.getElementById('errorModal').style.display = 'block';
+                        document.getElementById('errorModalMessage').textContent = 'Registration failed. Please try again.';
+                    }
+                  </script>";
+        }
     }
 }
 ?>
@@ -82,6 +99,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             font-size: 14px;
             margin-top: 5px;
         }
+        .input-container {
+            position: relative;
+            margin-bottom: 15px;
+        }
+        .input-container span {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+        }
     </style>
 </head>
 <body>
@@ -89,14 +115,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <form action="register.php" method="post" class="login-form" id="registerForm">
             <h2 class="form-title">Register</h2>
             <p class="form-subtitle">Please enter your details to register.</p>
-            <input type="text" name="username" id="username" placeholder="Username" required class="form-input">
-            <span id="usernameError" class="error-message"></span>
-            <input type="email" name="email" id="email" placeholder="Email" required class="form-input">
-            <span id="emailError" class="error-message"></span>
-            <input type="password" name="password" id="password" placeholder="Password" required class="form-input">
-            <span id="passwordError" class="error-message"></span>
-            <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required class="form-input">
-            <span id="confirmPasswordError" class="error-message"></span>
+            <div class="input-container">
+                <input type="text" name="username" id="username" placeholder="Username" required class="form-input">
+                <span id="usernameError" class="error-message"></span>
+            </div>
+            <div class="input-container">
+                <input type="email" name="email" id="email" placeholder="Email" required class="form-input">
+                <span id="emailError" class="error-message"></span>
+            </div>
+            <div class="input-container">
+                <input type="password" name="password" id="password" placeholder="Password" required class="form-input">
+                <span id="passwordError" class="error-message"></span>
+            </div>
+            <div class="input-container">
+                <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required class="form-input">
+                <span id="confirmPasswordError" class="error-message"></span>
+            </div>
             <button type="submit" class="form-button">Register</button>
             <p class="signup-text">Already have an account? <a href="login.php" class="signup-link">Sign in here!</a></p>
         </form>
@@ -114,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div id="errorModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="document.getElementById('errorModal').style.display='none'">&times;</span>
-            <p>Registration failed. Please try again.</p>
+            <p id="errorModalMessage">Registration failed. Please try again.</p>
         </div>
     </div>
 

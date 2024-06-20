@@ -139,9 +139,13 @@ body {
     gap: 20px; 
 }
 
+.all-posts-link:hover{
+      color:blue;
+}
 
-
-
+.all-posts-link{
+    transition: color ease-in-out 0.3s;
+}
 
 .post-card:hover {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 

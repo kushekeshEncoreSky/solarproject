@@ -12,39 +12,53 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $content = $_POST['content'];
     $user_id = $_SESSION['user_id'];
 
-    // Handle file upload
-    $image = null;
-    if (isset($_FILES['image']) && $_FILES['image']['error'] == UPLOAD_ERR_OK) {
-        $target_dir = "../uploads/"; // Use the relative path
-        $target_file = $target_dir . basename($_FILES["image"]["name"]);
-
-        // Check if the uploads directory is writable
-        if (is_writable($target_dir)) {
-            if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-                $image = basename($_FILES["image"]["name"]);
-            } else {
-                echo "Error moving the uploaded file.";
-            }
-        } else {
-            echo "The uploads directory is not writable.";
-        }
-    }
-
-    // Insert post into database
-    $sql = "INSERT INTO posts (title, content, user_id, image) VALUES (?, ?, ?, ?)";
+    // Get the username and email of the current user
+    $sql = "SELECT username, email FROM users WHERE id = ?";
     $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
+    $username = $user['username'];
+    $email = $user['email'];
 
-    // Check if image is null and set appropriate parameter type
-    if ($image !== null) {
-        $stmt->bind_param('ssis', $title, $content, $user_id, $image);
+    // Check if username or email already exists
+    $sql = "SELECT id FROM users WHERE (username = ? OR email = ?) AND id != ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('ssi', $username, $email, $user_id);
+    $stmt->execute();
+    $stmt->store_result();
+    if ($stmt->num_rows > 0) {
+        echo "<script>alert('Username or email already exists.');</script>";
     } else {
-        $stmt->bind_param('ssis', $title, $content, $user_id, $image);
-    }
+        // Handle file upload
+        $image = null;
+        if (isset($_FILES['image']) && $_FILES['image']['error'] == UPLOAD_ERR_OK) {
+            $target_dir = "../uploads/"; // Use the relative path
+            $target_file = $target_dir . basename($_FILES["image"]["name"]);
 
-    if ($stmt->execute()) {
-        echo "Post created successfully.";
-    } else {
-        echo "Failed to create post.";
+            // Check if the uploads directory is writable
+            if (is_writable($target_dir)) {
+                if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+                    $image = basename($_FILES["image"]["name"]);
+                } else {
+                    echo "Error moving the uploaded file.";
+                }
+            } else {
+                echo "The uploads directory is not writable.";
+            }
+        }
+
+        // Insert post into database
+        $sql = "INSERT INTO posts (title, content, user_id, image) VALUES (?, ?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('ssis', $title, $content, $user_id, $image);
+
+        if ($stmt->execute()) {
+            echo "<script>alert('Post created successfully.');</script>";
+        } else {
+            echo "<script>alert('Failed to create post.');</script>";
+        }
     }
 }
 ?>
@@ -143,22 +157,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     .signup-link:hover {
         text-decoration: underline;
     }
+
     .resizable {
-    min-height: 100px; /* Minimum height to start with */
-    overflow-y: hidden; /* Hide vertical scrollbar */
-}
+        min-height: 100px; /* Minimum height to start with */
+        overflow-y: hidden; /* Hide vertical scrollbar */
+    }
+
+    .image-preview {
+        display: none;
+        margin-bottom: 20px;
+    }
 </style>
 </head>
 <body>
 
 <div class="form-container">
-    <form action="create_post.php" method="post" enctype="multipart/form-data">
+    <form action="create_post.php" method="post" enctype="multipart/form-data" onsubmit="return validateImage();">
         <h2 class="form-title">Create Post</h2>
         <input type="text" name="title" class="form-input" placeholder="Title" required>
         <textarea name="content" id="content" class="form-input resizable" placeholder="Content" required
         onChange="autoResize(this)"></textarea>
 
-        <input type="file" name="image" class="form-input">
+        <input type="file" name="image" id="image" class="form-input" accept="image/*" onchange="previewImage();" required>
+        <img id="imagePreview" class="image-preview" src="#" alt="Image Preview" />
+
         <button type="submit" class="form-button">Create Post</button>
     </form>
 </div>
@@ -169,6 +191,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     function autoResize(element) {
         element.style.height = 'auto';
         element.style.height = (element.scrollHeight) + 'px';
+    }
+
+    function validateImage() {
+        const fileInput = document.getElementById('image');
+        const filePath = fileInput.value;
+        const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+        if (!allowedExtensions.exec(filePath)) {
+            alert('Please upload a valid image file (jpg, jpeg, png, gif).');
+            fileInput.value = '';
+            return false;
+        }
+        return true;
+    }
+
+    function previewImage() {
+        const file = document.getElementById('image').files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imgPreview = document.getElementById('imagePreview');
+                imgPreview.src = e.target.result;
+                imgPreview.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        }
     }
 </script>
 </body>
