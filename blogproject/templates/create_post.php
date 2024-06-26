@@ -12,53 +12,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $content = $_POST['content'];
     $user_id = $_SESSION['user_id'];
 
-    // Get the username and email of the current user
-    $sql = "SELECT username, email FROM users WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param('i', $user_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $user = $result->fetch_assoc();
-    $username = $user['username'];
-    $email = $user['email'];
+    // Handle file upload
+    $image = null;
+    if (isset($_FILES['image']) && $_FILES['image']['error'] == UPLOAD_ERR_OK) {
+        $target_dir = "../uploads/"; // Use the relative path
+        $target_file = $target_dir . basename($_FILES["image"]["name"]);
 
-    // Check if username or email already exists
-    $sql = "SELECT id FROM users WHERE (username = ? OR email = ?) AND id != ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param('ssi', $username, $email, $user_id);
-    $stmt->execute();
-    $stmt->store_result();
-    if ($stmt->num_rows > 0) {
-        echo "<script>alert('Username or email already exists.');</script>";
-    } else {
-        // Handle file upload
-        $image = null;
-        if (isset($_FILES['image']) && $_FILES['image']['error'] == UPLOAD_ERR_OK) {
-            $target_dir = "../uploads/"; // Use the relative path
-            $target_file = $target_dir . basename($_FILES["image"]["name"]);
-
-            // Check if the uploads directory is writable
-            if (is_writable($target_dir)) {
-                if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-                    $image = basename($_FILES["image"]["name"]);
-                } else {
-                    echo "Error moving the uploaded file.";
-                }
+        // Check if the uploads directory is writable
+        if (is_writable($target_dir)) {
+            if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+                $image = basename($_FILES["image"]["name"]);
             } else {
-                echo "The uploads directory is not writable.";
+                echo "<script>alert('Error moving the uploaded file.');</script>";
             }
-        }
-
-        // Insert post into database
-        $sql = "INSERT INTO posts (title, content, user_id, image) VALUES (?, ?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param('ssis', $title, $content, $user_id, $image);
-
-        if ($stmt->execute()) {
-            echo "<script>alert('Post created successfully.');</script>";
         } else {
-            echo "<script>alert('Failed to create post.');</script>";
+            echo "<script>alert('The uploads directory is not writable.');</script>";
         }
+    }
+
+    // Insert post into database
+    $sql = "INSERT INTO posts (title, content, user_id, image) VALUES (?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('ssis', $title, $content, $user_id, $image);
+
+    if ($stmt->execute()) {
+        header("Location: my_posts.php");
+        exit();
+    } else {
+        echo "<script>alert('Failed to create post.');</script>";
     }
 }
 ?>
@@ -86,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         padding: 40px;
         border-radius: 10px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        max-width: 400px;
+        max-width: 600px;
         width: 100%;
         text-align: center;
     }
@@ -97,42 +78,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         color: #333;
     }
 
-    .form-subtitle {
-        color: #777;
-        margin-bottom: 30px;
-    }
-
     .form-input {
-        width: 100%;
+        width: calc(100% - 20px); /* Adjusted to account for padding */
         padding: 10px;
         margin-bottom: 20px;
         border: 1px solid #ddd;
         border-radius: 5px;
-    }
-
-    .form-options {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-
-    .remember-me {
-        display: flex;
-        align-items: center;
-        font-size: 0.9em;
-    }
-
-    .forgot-password {
-        color: #0073e6;
-        text-decoration: none;
-        font-size: 0.9em;
+        box-sizing: border-box; /* Ensure padding is included in width */
     }
 
     .form-button {
         width: 100%;
         padding: 10px;
-        background-color: #ff4d4d;
+        background-color: #007bff;
         color: #fff;
         border: none;
         border-radius: 5px;
@@ -141,31 +99,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     .form-button:hover {
-        background-color: #cc0000;
-    }
-
-    .signup-text {
-        margin-top: 20px;
-        color: #777;
-    }
-
-    .signup-link {
-        color: #ff4d4d;
-        text-decoration: none;
-    }
-
-    .signup-link:hover {
-        text-decoration: underline;
-    }
-
-    .resizable {
-        min-height: 100px; /* Minimum height to start with */
-        overflow-y: hidden; /* Hide vertical scrollbar */
+        background-color: #0056b3;
     }
 
     .image-preview {
         display: none;
-        margin-bottom: 20px;
+        margin-top: 20px;
+        max-width: 100%;
+        height: auto;
+    }
+
+    @media (max-width: 768px) {
+        .form-input {
+            width: calc(100% - 16px); /* Adjusted for smaller screens */
+            padding: 8px;
+        }
     }
 </style>
 </head>
@@ -176,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <h2 class="form-title">Create Post</h2>
         <input type="text" name="title" class="form-input" placeholder="Title" required>
         <textarea name="content" id="content" class="form-input resizable" placeholder="Content" required
-        onChange="autoResize(this)"></textarea>
+        oninput="autoResize(this)"></textarea>
 
         <input type="file" name="image" id="image" class="form-input" accept="image/*" onchange="previewImage();" required>
         <img id="imagePreview" class="image-preview" src="#" alt="Image Preview" />
@@ -188,11 +136,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <?php include('../includes/footer.php'); ?>
 
 <script>
-    function autoResize(element) {
-        element.style.height = 'auto';
-        element.style.height = (element.scrollHeight) + 'px';
-    }
-
     function validateImage() {
         const fileInput = document.getElementById('image');
         const filePath = fileInput.value;
@@ -203,6 +146,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             return false;
         }
         return true;
+    }
+
+    function autoResize(element) {
+        element.style.height = 'auto';
+        element.style.height = (element.scrollHeight) + 'px';
     }
 
     function previewImage() {
@@ -218,5 +166,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 </script>
+
 </body>
 </html>

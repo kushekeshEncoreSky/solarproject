@@ -85,9 +85,9 @@ $result = $stmt->get_result();
                 echo '</div>';
 
                 $count++;
-                if ($count % 3 == 0) {
-                    echo '<div style="clear:both;"></div>'; // Clearfix after every third post
-                }
+                // if (!($count % 3 )== 0) {
+                //     echo '<div style="clear:both;"></div>'; // Clearfix after every third post
+                // }
             }
         } else {
             echo "<p>You have no posts yet.</p>";

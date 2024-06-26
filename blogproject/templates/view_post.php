@@ -22,9 +22,10 @@ if (isset($_GET['id'])) {
     if ($result->num_rows > 0) {
         $post = $result->fetch_assoc();
     } else {
-        echo "<p>Post not found.</p>";
-        include('../includes/footer.php');
-        exit();
+        header("Location: all_posts.php"); 
+        // echo "<p>Post not found.</p>";
+        // include('../includes/footer.php');
+        // exit();
     }
 } else {
     header("Location: all_posts.php"); // Redirect to the all posts page if no post ID is provided
@@ -50,6 +51,7 @@ if (isset($_GET['id'])) {
             margin: 0 auto;
             padding: 20px;
             text-align: center; /* Center the content */
+            width:100%;
         }
 
         .post-detail {
@@ -57,6 +59,7 @@ if (isset($_GET['id'])) {
             max-width: 840px;
             margin-bottom: 40px;
             text-align: center;
+            width:100%;
         }
 
         .banner-image {
@@ -67,7 +70,7 @@ if (isset($_GET['id'])) {
 
         .post-content {
             max-width: 800px;
-            margin: 0 auto;
+            /* margin: 0 auto; */
             text-align: left; /* Left-align the post content */
         }
 
@@ -264,7 +267,7 @@ if (isset($_GET['id'])) {
     </div>
 
     <?php if (isset($_SESSION['user_id'])): ?>
-        <form method="post" action="" class="comment-form">
+        <form method="post" action="" class="comment-form" autocomplete="off">
             <input type="hidden" name="post_id" value="<?php echo $post_id; ?>">
             <textarea name="comment" required placeholder="Type your comment here..." oninput="autoResize(this)"></textarea>
             <button type="submit">Add Comment</button>

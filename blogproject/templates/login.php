@@ -1,33 +1,42 @@
-
-
 <?php
+// session_start();
+
+// if (!isset($_SESSION['username'])) {
+//     header('Location: my_posts.php');
+//     exit();
+// }
 include('../includes/db.php');
 
 $error_message = "";
+$username = "";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $sql = "SELECT * FROM users WHERE username = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param('s', $username);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-        $user = $result->fetch_assoc();
-        if (password_verify($password, $user['password'])) {
-            session_start();
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['username'] = $user['username'];
-            header("Location: my_posts.php");
-            exit();
-        } else {
-            $error_message = "Invalid password or username.";
-        }
+    if (empty($username) || empty($password)) {
+        $error_message = "Please fill in all required fields.";
     } else {
-        $error_message = "No user found.";
+        $sql = "SELECT * FROM users WHERE username = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('s', $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $user = $result->fetch_assoc();
+            if (password_verify($password, $user['password'])) {
+                session_start();
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['username'] = $user['username'];
+                header("Location: my_posts.php");
+                exit();
+            } else {
+                $error_message = "Invalid password or username.";
+            }
+        } else {
+            $error_message = "No user found.";
+        }
     }
 }
 ?>
@@ -40,6 +49,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="../assests/css/style1.css">
     <title>Login</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .form-container {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
         .modal {
             display: none; 
             position: fixed; 
@@ -87,11 +104,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <?php endif; ?>
 
     <div class="form-container">
-        <form action="login.php" method="post" class="login-form">
+        <form action="login.php" method="post" class="login-form" id="loginForm" autocomplete="off">
             <h2 class="form-title">WELCOME BACK</h2>
             <p class="form-subtitle">Welcome back! Please enter your details.</p>
-            <input type="name" name="username" placeholder="Username" required class="form-input">
-            <input type="password" name="password" placeholder="Password" required class="form-input">
+            <input type="text" name="username" placeholder="Username" class="form-input" value="<?php echo htmlspecialchars($username); ?>">
+            <input type="password" name="password" placeholder="Password" class="form-input">
             <div class="form-options">
                 <a href="#" class="forgot-password">Forgot password</a>
             </div>
@@ -116,6 +133,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         modal.style.display = "none";
                     }
                 }
+            }
+
+            document.getElementById('loginForm').addEventListener('submit', function(event) {
+                var username = document.getElementsByName('username')[0].value.trim();
+                var password = document.getElementsByName('password')[0].value.trim();
+
+                if (username === '' || password === '') {
+                    event.preventDefault();
+                    showErrorModal("Please fill in all required fields.");
+                }
+            });
+
+            function showErrorModal(message) {
+                var errorModal = document.getElementById('errorModal');
+                var errorMessage = errorModal.querySelector('p');
+                errorMessage.textContent = message;
+                errorModal.style.display = 'block';
             }
         });
     </script>

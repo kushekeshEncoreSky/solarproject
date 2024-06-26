@@ -3,7 +3,8 @@ session_start();
 
 include('../includes/db.php');
 
-// Handle form submission
+$errorMessage = '';
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
     $email = $_POST['email'];
@@ -17,36 +18,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->store_result();
 
     if ($stmt->num_rows > 0) {
-        echo "<script>
-                window.onload = function() {
-                    document.getElementById('errorModal').style.display = 'block';
-                    document.getElementById('errorModalMessage').textContent = 'Username or email already exists.';
-                }
-              </script>";
+        $errorMessage = 'Username or email already exists.';
+        if ($stmt->num_rows > 0) {
+            $stmt->bind_result($id);
+            $stmt->fetch();
+            if ($id) {
+                $errorMessage = 'Username or email already exists.';
+            }
+        }
     } else {
         $sql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
         $stmt = $conn->prepare($sql);
-
-        // Bind parameters
         $stmt->bind_param('sss', $username, $email, $password);
 
-        // Execute statement
         if ($stmt->execute()) {
-            echo "<script>
-                    window.onload = function() {
-                        document.getElementById('successModal').style.display = 'block';
-                        setTimeout(function() {
-                            window.location.href = 'login.php';
-                        }, 3000); // 3 seconds delay
-                    }
-                  </script>";
+            $_SESSION['success_message'] = 'Registration successful! Redirecting to login...';
+            header('Location: register.php');
+            exit();
         } else {
-            echo "<script>
-                    window.onload = function() {
-                        document.getElementById('errorModal').style.display = 'block';
-                        document.getElementById('errorModalMessage').textContent = 'Registration failed. Please try again.';
-                    }
-                  </script>";
+            $errorMessage = 'Registration failed. Please try again.';
         }
     }
 }
@@ -60,7 +50,79 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="../assests/css/style1.css">
     <title>Register</title>
     <style>
-        /* Styles for modal and other elements */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .form-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            /* background-color: #f4f4f4; */
+        }
+        .login-form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        .form-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .form-subtitle {
+            font-size: 14px;
+            margin-bottom: 20px;
+            color: #555;
+        }
+        .input-container {
+            position: relative;
+            margin-bottom: 15px;
+        }
+        .input-container input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .error-message {
+            color: red;
+            font-size: 11px;
+            margin-top: 5px;
+        }
+        .form-button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background: #5cb85c;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .form-button:hover {
+            background: #4cae4c;
+        }
+        .signup-text {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .signup-link {
+            color: #5cb85c;
+            text-decoration: none;
+        }
+        .signup-link:hover {
+            text-decoration: underline;
+        }
         .modal {
             display: none;
             position: fixed;
@@ -70,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgba(0,0,0,0.4);
+            background-color: rgba(0, 0, 0, 0.4);
             padding-top: 60px;
         }
         .modal-content {
@@ -94,41 +156,64 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             text-decoration: none;
             cursor: pointer;
         }
-        .error-message {
-            color: red;
-            font-size: 14px;
-            margin-top: 5px;
-        }
-        .input-container {
-            position: relative;
-            margin-bottom: 15px;
-        }
-        .input-container span {
-            position: absolute;
-            left: 0;
-            bottom: 0;
+
+        @media (max-width: 600px) {
+            .login-form {
+                padding: 15px;
+                max-width: 100%;
+            }
+            .form-title {
+                font-size: 20px;
+            }
+            .form-subtitle {
+                font-size: 12px;
+            }
+            .form-button {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 <body>
+    <?php
+    if (isset($_SESSION['success_message'])) {
+        echo "<script>
+                window.onload = function() {
+                    document.getElementById('successModal').style.display = 'block';
+                    setTimeout(function() {
+                        window.location.href = 'login.php';
+                    }, 3000); // 3 seconds delay
+                }
+              </script>";
+        unset($_SESSION['success_message']);
+    } elseif (!empty($errorMessage)) {
+        echo "<script>
+                window.onload = function() {
+                    document.getElementById('errorModal').style.display = 'block';
+                    document.getElementById('errorModalMessage').textContent = '$errorMessage';
+                }
+              </script>";
+    }
+    ?>
+
     <div class="form-container">
         <form action="register.php" method="post" class="login-form" id="registerForm">
             <h2 class="form-title">Register</h2>
             <p class="form-subtitle">Please enter your details to register.</p>
             <div class="input-container">
-                <input type="text" name="username" id="username" placeholder="Username" required class="form-input">
+                <input type="text" name="username" id="username" placeholder="Username" class="form-input" value="<?php echo isset($_POST['username']) ? htmlspecialchars($_POST['username']) : ''; ?>">
                 <span id="usernameError" class="error-message"></span>
             </div>
             <div class="input-container">
-                <input type="email" name="email" id="email" placeholder="Email" required class="form-input">
+                <input type="text" name="email" id="email" placeholder="Email" class="form-input" value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>">
                 <span id="emailError" class="error-message"></span>
             </div>
             <div class="input-container">
-                <input type="password" name="password" id="password" placeholder="Password" required class="form-input">
+                <input type="password" name="password" id="password" placeholder="Password" class="form-input">
                 <span id="passwordError" class="error-message"></span>
             </div>
             <div class="input-container">
-                <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required class="form-input">
+                <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" class="form-input">
                 <span id="confirmPasswordError" class="error-message"></span>
             </div>
             <button type="submit" class="form-button">Register</button>
@@ -158,6 +243,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         const emailField = document.getElementById('email');
         const passwordField = document.getElementById('password');
         const confirmPasswordField = document.getElementById('confirm_password');
+
+        // Clear error message when typing
+        usernameField.addEventListener('input', () => clearError('usernameError'));
+        emailField.addEventListener('input', () => clearError('emailError'));
+        passwordField.addEventListener('input', () => clearError('passwordError'));
+        confirmPasswordField.addEventListener('input', () => clearError('confirmPasswordError'));
 
         usernameField.addEventListener('blur', validateUsername);
         emailField.addEventListener('blur', validateEmail);
@@ -190,8 +281,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         function validatePassword() {
             const passwordValue = passwordField.value.trim();
             const passwordError = document.getElementById('passwordError');
+            const re = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/;
             if (passwordValue === '') {
                 passwordError.textContent = 'Password is required.';
+            } else if (!re.test(passwordValue)) {
+                passwordError.textContent = 'Password must be at least 6 characters long, include one uppercase letter, one number, and one special character.';
             } else {
                 passwordError.textContent = '';
             }
@@ -208,6 +302,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             } else {
                 confirmPasswordError.textContent = '';
             }
+        }
+
+        function clearError(errorId) {
+            document.getElementById(errorId).textContent = '';
         }
 
         // Form submission validation
@@ -228,8 +326,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (hasError) {
                 event.preventDefault();
                 showError('Please fill in the required fields correctly.');
+                clearInvalidFields();
             }
         });
+
+        function clearInvalidFields() {
+            const usernameError = document.getElementById('usernameError').textContent;
+            const emailError = document.getElementById('emailError').textContent;
+            const passwordError = document.getElementById('passwordError').textContent;
+            const confirmPasswordError = document.getElementById('confirmPasswordError').textContent;
+
+            if (usernameError) {
+                usernameField.value = '';
+            }
+            if (emailError) {
+                emailField.value = '';
+            }
+            if (passwordError) {
+                passwordField.value = '';
+            }
+            if (confirmPasswordError) {
+                confirmPasswordField.value = '';
+            }
+        }
 
         function showError(message) {
             const errorModal = document.getElementById('errorModal');
