@@ -18,7 +18,7 @@ include('../includes/db.php');
 </head>
 <body>
     <?php include '../includes/header.php'; ?>
-    <h1 class="section-title" style="text-align: center;">All Posts</h1>
+    <h1 class="section-title" style="text-align: center; margin-top:10px;">All Posts</h1>
     <div class="container">
         <div class="grid">
             <?php

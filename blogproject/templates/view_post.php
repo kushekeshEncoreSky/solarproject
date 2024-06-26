@@ -6,7 +6,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 include('../includes/db.php');
-include('../includes/header.php');
+// include('../includes/header.php');
 include('./comment_handler.php'); // Include the comment handler
 
 if (isset($_GET['id'])) {
